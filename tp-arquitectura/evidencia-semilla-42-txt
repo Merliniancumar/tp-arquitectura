@@ -1,0 +1,28 @@
+
+========== Ejemplo con semilla = 42 ==========
+
+Tablero generado:
+B . B . B C B . B .
+. . . . . . . . . .
+. . . . . . . . . .
+. C . . . . . . . .
+. . . . . . . . . .
+. . C . . . . . . .
+. . . . . . . . . .
+. . C . . . . . . .
+. . . . . . . . . .
+N . N . N C N . N .
+
+Posiciones de las casas: [
+  { fila: 0, columna: 5 },
+  { fila: 7, columna: 2 },
+  { fila: 3, columna: 1 },
+  { fila: 9, columna: 5 },
+  { fila: 5, columna: 2 }
+]
+
+Movimientos válidos de la ficha blanca en (0,0):
+[
+  { fila: 1, columna: 0, direccion: 'abajo' },
+  { fila: 0, columna: 1, direccion: 'derecha' }
+]
