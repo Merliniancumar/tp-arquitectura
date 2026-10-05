@@ -1,8 +1,29 @@
-// Index.js 
-// Esto es un punto de entrada para el bot, donde se inicializa y se configura el bot.
-// Esto se completará con lógica de decisión (pieceId, direction) en la Entrega 4 - Bot v0.1.
+// index.js
+// Punto de entrada del bot v0.1.
+//
+// Uso:
+//   node index.js <ruta-al-archivo-json-de-estado>
+//
+// Ejemplo:
+//   node index.js fixtures/estado-ejemplo-1.json
+//
+// Eato devuelve por consola un JSON con la decisión del bot:
+//   { "pieceId": 2, "direction": "derecha" }
 
-const chalk = require('chalk');
+const { leerEstadoDesdeArchivo } = require("./src/leerEstado");
+const { decidirMovimiento } = require("./src/logica");
 
-console.log(chalk.green("Bot inicializado correctamente."));
-console.log(chalk.blue("Versión de Node.js: " + process.version));
+function main() {
+  const rutaEstado = process.argv[2];
+
+  try {
+    const estado = leerEstadoDesdeArchivo(rutaEstado);
+    const decision = decidirMovimiento(estado);
+    console.log(JSON.stringify(decision));
+  } catch (error) {
+    console.error("Error:", error.message);
+    process.exitCode = 1;
+  }
+}
+
+main();

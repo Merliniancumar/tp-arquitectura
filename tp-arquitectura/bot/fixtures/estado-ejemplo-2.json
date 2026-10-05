@@ -1,0 +1,12 @@
+{
+  "turno": "blanco",
+  "fichas": [
+    { "id": 0, "color": "blanco", "fila": 1, "columna": 1 },
+    { "id": 1, "color": "blanco", "fila": 4, "columna": 4 },
+    { "id": 0, "color": "negro", "fila": 0, "columna": 1 },
+    { "id": 1, "color": "negro", "fila": 1, "columna": 0 },
+    { "id": 2, "color": "negro", "fila": 2, "columna": 1 },
+    { "id": 3, "color": "negro", "fila": 1, "columna": 2 }
+  ],
+  "casas": []
+}
