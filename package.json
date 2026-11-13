@@ -1,0 +1,24 @@
+{
+  "name": "tp-arquitectura",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bot HTTP para el juego de casas",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "test:watch": "npm run test -- --watchAll",
+    "test:coverage": "npm run test -- --coverage"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.5.1",
+    "jest": "^30.5.1"
+  }
+}
