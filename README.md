@@ -235,7 +235,7 @@ Para desplegar desde GitHub Actions hay que configurar estos secretos en el repo
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
 
-El workflow ejecuta `npm ci` y `npm test` antes de desplegar. Si las pruebas fallan, no se publica nada.
+El workflow ejecuta `npm ci` y `npm test` antes de desplegar. Si las pruebas fallan, no se publica nada. Si los secretos de Vercel todavía no están configurados, el job de despliegue se omite y el CI sigue en verde.
 
 ## Sobre esta versión
 

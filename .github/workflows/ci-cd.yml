@@ -46,45 +46,49 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
     steps:
-      - name: Validar secrets requeridos
+      - name: Comprobar secrets de Vercel
+        id: vercel-secrets
         shell: bash
         run: |
-          missing=()
-          [ -z "$VERCEL_TOKEN" ] && missing+=(VERCEL_TOKEN)
-          [ -z "$VERCEL_ORG_ID" ] && missing+=(VERCEL_ORG_ID)
-          [ -z "$VERCEL_PROJECT_ID" ] && missing+=(VERCEL_PROJECT_ID)
-          if [ ${#missing[@]} -gt 0 ]; then
-            echo "::error::Faltan GitHub Actions secrets: ${missing[*]}"
-            exit 1
+          if [ -n "$VERCEL_TOKEN" ] && [ -n "$VERCEL_ORG_ID" ] && [ -n "$VERCEL_PROJECT_ID" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No se configuraron los secrets de Vercel; se omite el despliegue."
           fi
 
       - name: Descargar el repositorio
+        if: steps.vercel-secrets.outputs.available == 'true'
         uses: actions/checkout@v4
 
       - name: Configurar Node.js
+        if: steps.vercel-secrets.outputs.available == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
       - name: Instalar dependencias reproducibles
+        if: steps.vercel-secrets.outputs.available == 'true'
         run: npm ci
 
       - name: Obtener configuración de Vercel
+        if: steps.vercel-secrets.outputs.available == 'true'
         run: npx --yes vercel@50.38.3 pull --yes --environment=${{ github.event_name == 'pull_request' && 'preview' || 'production' }} --token="$VERCEL_TOKEN"
 
       - name: Construir artefacto
+        if: steps.vercel-secrets.outputs.available == 'true'
         run: npx --yes vercel@50.38.3 build ${{ github.event_name == 'pull_request' && '' || '--prod' }} --token="$VERCEL_TOKEN"
 
       - name: Desplegar Preview
-        if: github.event_name == 'pull_request'
+        if: steps.vercel-secrets.outputs.available == 'true' && github.event_name == 'pull_request'
         run: |
           url=$(npx --yes vercel@50.38.3 deploy --prebuilt --token="$VERCEL_TOKEN")
           echo "### Preview desplegada" >> "$GITHUB_STEP_SUMMARY"
           echo "$url" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Desplegar Production
-        if: github.event_name != 'pull_request'
+        if: steps.vercel-secrets.outputs.available == 'true' && github.event_name != 'pull_request'
         run: |
           url=$(npx --yes vercel@50.38.3 deploy --prebuilt --prod --token="$VERCEL_TOKEN")
           echo "### Production desplegada" >> "$GITHUB_STEP_SUMMARY"
