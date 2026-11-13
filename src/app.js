@@ -11,6 +11,16 @@ app.disable("x-powered-by");
 // Debe registrarse antes del endpoint para que req.body esté disponible.
 app.use(express.json({ limit: "64kb" }));
 
+// Página informativa para comprobar que la función está viva. La reescritura
+// de Vercel envía "/" a "/api", así que aceptamos las dos rutas.
+app.get(["/", "/api"], (req, res) => {
+  return res.status(200).json({
+    name: "Bot TP Arquitectura",
+    status: "ok",
+    endpoints: ["GET /profile", "POST /move"],
+  });
+});
+
 // Perfil público del bot. El árbitro lo consulta antes de iniciar la partida.
 app.get("/profile", (req, res) => {
   return res.status(200).json({

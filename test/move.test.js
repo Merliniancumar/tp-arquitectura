@@ -139,6 +139,19 @@ test("POST /move valida el estado y devuelve un diccionario", async () => {
   });
 });
 
+test("GET / permite comprobar que la función está desplegada", async () => {
+  await conServidor(async (url) => {
+    const response = await fetch(`${url}/`);
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      name: "Bot TP Arquitectura",
+      status: "ok",
+      endpoints: ["GET /profile", "POST /move"],
+    });
+  });
+});
+
 test("GET /profile devuelve exactamente el perfil público del bot", async () => {
   await conServidor(async (url) => {
     const response = await fetch(`${url}/profile`);

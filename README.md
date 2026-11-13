@@ -226,8 +226,12 @@ tp-arquitectura/
 El proyecto ya incluye:
 
 - `api/index.js`, que exporta la aplicación sin abrir un puerto;
-- `vercel.json`, que redirige todas las rutas a la función;
+- `vercel.json`, que redirige todas las rutas a la función y desactiva la detección automática de Express;
 - un workflow de GitHub Actions en `.github/workflows/ci-cd.yml`.
+
+> **Importante:** Vercel detecta automáticamente proyectos Express cuando encuentra `express` en `package.json` y un archivo como `src/app.js` que lo importa. Ese preset toma `src/app.js` como entrada, pero ese archivo no abre un puerto ni exporta un handler por defecto, así que la función falla con `500 FUNCTION_INVOCATION_FAILED`. Por eso `vercel.json` incluye `"framework": null`, que fuerza el uso de `api/index.js`.
+>
+> Si el proyecto ya fue importado como Express, además hay que entrar en **Settings → General → Framework Preset**, elegir **Other** y volver a desplegar.
 
 Para desplegar desde GitHub Actions hay que configurar estos secretos en el repositorio:
 
@@ -236,6 +240,15 @@ Para desplegar desde GitHub Actions hay que configurar estos secretos en el repo
 - `VERCEL_PROJECT_ID`
 
 El workflow ejecuta `npm ci` y `npm test` antes de desplegar. Si las pruebas fallan, no se publica nada. Si los secretos de Vercel todavía no están configurados, el job de despliegue se omite y el CI sigue en verde.
+
+Para comprobar una URL desplegada:
+
+```bash
+curl https://TU-PROYECTO.vercel.app/
+curl https://TU-PROYECTO.vercel.app/profile
+```
+
+La primera debe devolver `{"status":"ok",...}` y la segunda el perfil del bot. El árbitro debe apuntar a `https://TU-PROYECTO.vercel.app/move`.
 
 ## Sobre esta versión
 
